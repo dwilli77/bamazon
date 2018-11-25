@@ -117,6 +117,7 @@ function buyItem(id, quantity){
         if (err) throw err;
         if (res.length === 0){
             console.log("Invalid item selected");
+            customer();
         }else{
             let itemsLeft = res[0].stock_quantity;
             if (itemsLeft < quantity){
@@ -250,32 +251,37 @@ function addToInv(){
         let query = 'SELECT stock_quantity FROM products WHERE ?';
         connection.query(query, {item_id: answers.item}, function(err, res){
             if (err) throw err;
-            let currentStock = res[0].stock_quantity;
-            console.log(`# Items currently in inventory: ${currentStock}`);
-            inquirer.prompt([
-                {
-                    name: 'amount',
-                    message: 'How many units would you like to add? ',
-                    type: 'input',
-                    validate: function (name){
-                        if (isNaN(parseInt(name))){
-                            return false;
-                        }else if(parseInt(name) < 1){
-                            return false;
-                        }else{
-                            return true;
-                        };
+            if (res.length === 0){
+                console.log("Invalid item selected");
+                managerPrompt();
+            }else{
+                let currentStock = res[0].stock_quantity;
+                console.log(`# Items currently in inventory: ${currentStock}`);
+                inquirer.prompt([
+                    {
+                        name: 'amount',
+                        message: 'How many units would you like to add? ',
+                        type: 'input',
+                        validate: function (name){
+                            if (isNaN(parseInt(name))){
+                                return false;
+                            }else if(parseInt(name) < 1){
+                                return false;
+                            }else{
+                                return true;
+                            };
+                        }
                     }
-                }
-            ]).then(answer => {
-                let totalStock = parseInt(answer.amount) + parseInt(currentStock);
-                let updateQuery = 'UPDATE products SET ? WHERE ?';
-                connection.query(updateQuery, [{stock_quantity: totalStock}, {item_id: answers.item}], function(err, res){
-                    if (err) throw err;
-                    console.log(`Stock quantity updated to ${totalStock} for item id # ${answers.item}`);
-                    managerPrompt();
+                ]).then(answer => {
+                    let totalStock = parseInt(answer.amount) + parseInt(currentStock);
+                    let updateQuery = 'UPDATE products SET ? WHERE ?';
+                    connection.query(updateQuery, [{stock_quantity: totalStock}, {item_id: answers.item}], function(err, res){
+                        if (err) throw err;
+                        console.log(`Stock quantity updated to ${totalStock} for item id # ${answers.item}`);
+                        managerPrompt();
+                    });
                 });
-            });
+            };
         });
     });
 }
