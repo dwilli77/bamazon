@@ -122,6 +122,7 @@ function buyItem(id, quantity){
             let itemsLeft = res[0].stock_quantity;
             if (itemsLeft < quantity){
                 console.log("Not enough inventory to complete transaction");
+                customer();
             }else{
                 itemsLeft -= parseInt(quantity);
                 let total = parseInt(quantity) * parseFloat(res[0].price).toFixed(2);
