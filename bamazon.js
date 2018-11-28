@@ -257,7 +257,7 @@ function addToInv(){
                 managerPrompt();
             }else{
                 let currentStock = res[0].stock_quantity;
-                console.log(`# Items currently in inventory: ${currentStock}`);
+                console.log(`Items currently in inventory: ${currentStock}`);
                 inquirer.prompt([
                     {
                         name: 'amount',
