@@ -25,7 +25,7 @@ function userType(){
             name: "user",
             message: "Select your access:",
             type: "list",
-            choices: ["customer", "manager", "supervisor"]
+            choices: ["customer", "manager"]
         }
     ]).then(answer => {
         switch(answer.user){
