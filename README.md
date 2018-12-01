@@ -1,5 +1,5 @@
 # bamazon
-======
+
 
 Bamazon is an application that simulates an amazon store using
   * node.js
